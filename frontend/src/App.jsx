@@ -114,8 +114,8 @@ function App() {
         <label>Block Size: {blockSize} x {blockSize}</label>
         <input
           type="range"
-          min="3"
-          max="101"
+          min="1"
+          max="69"
           step="2"
           value={blockSize}
           onChange={handleBlockSlider}
