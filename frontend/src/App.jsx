@@ -7,6 +7,7 @@ function App() {
   const [imageUploaded, setImageUploaded] = useState(false);
   const [result, setResult] = useState(null);
   const [kernelSize, setKernelSize] = useState(17);
+  const [blockSize, setBlockSize] = useState(35);
 
   // IMAGE IS UPLOADED
   const handleUpload = async (e) => {
@@ -53,16 +54,16 @@ function App() {
   
     if (res.ok) {
       setImageUploaded(true);
-      updateErosion(kernelSize);
+      updateErosion(kernelSize, blockSize);
     }
   };
 
   // UPDATE OUTPUT IMAGE
-  const updateErosion = async (size) => {
+  const updateErosion = async (kern, block) => {
     const res = await fetch("http://127.0.0.1:5000/process", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ kernelSize: size }),
+      body: JSON.stringify({ kernelSize: kern, blockSize: block }),
     });
 
     if (res.ok) {
@@ -72,14 +73,23 @@ function App() {
     }
   };
   
-  // SLIDER IS DRAGGED
-  const handleSliderChange = (e) => {
+  const handleKernelSlider = (e) => {
     const kern = parseInt(e.target.value);
-    setKernelSize(parseInt(e.target.value));
-    console.log("Slider dragged with kern size:", kern);
-    //console.log(kern);
-    if (imageUploaded){
-      updateErosion(kern);
+    setKernelSize(kern);
+    console.log("Kernel size:", kern);
+    if (imageUploaded) {
+      updateErosion(kern, blockSize);
+    }
+  };
+  
+  const handleBlockSlider = (e) => {
+    let block = parseInt(e.target.value);
+    // Ensure blockSize is odd (adaptiveThreshold requires odd blockSize ≥ 3)
+    if (block % 2 === 0) block += 1;
+    setBlockSize(block);
+    console.log("Block size:", block);
+    if (imageUploaded) {
+      updateErosion(kernelSize, block);
     }
   };
 
@@ -94,10 +104,21 @@ function App() {
         <input
           type="range"
           min="1"
-          max="21"
+          max="9"
           step="1"
           value={kernelSize}
-          onChange={handleSliderChange}
+          onChange={handleKernelSlider}
+        />
+      </div>
+      <div>
+        <label>Block Size: {blockSize} x {blockSize}</label>
+        <input
+          type="range"
+          min="3"
+          max="101"
+          step="2"
+          value={blockSize}
+          onChange={handleBlockSlider}
         />
       </div>
 

@@ -5,7 +5,6 @@ import cv2
 import numpy as np
 
 app = Flask(__name__)
-#CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 CORS(app)
 
 stored_image = None
@@ -16,9 +15,9 @@ def upload_file():
     print("UPLOADED")
     global stored_image
     file = request.files['file']
-    kernel_size = int(request.form.get('kernelSize', 17))
+   # kernel_size = int(request.form.get('kernelSize', 17))
     
-    print(f"Received file: {file.filename} with kernel size: {kernel_size}")
+   # print(f"Received file: {file.filename} with kernel size: {kernel_size}")
     
     if file.filename.endswith('.png'):
         in_memory_file = BytesIO()
@@ -39,26 +38,38 @@ def apply_erosion():
     
     data = request.get_json()
     kernel_size = int(data.get('kernelSize', 17))
-    print("Applying erosion with kernel size:", kernel_size)
-
-    kernel = np.ones((kernel_size, kernel_size), np.uint8)
-    eroded_img = cv2.erode(stored_image, kernel, iterations=1)
+    block_size = int(data.get('blockSize', 35))
     
-    # GRAYSCALE
+   # print("Applying erosion with kernel size:", kernel_size)
+    
+    # GRAYSCALE THRESHOLDING (convert to grayscale, perform median blur, adaptive threshold)
     gray = cv2.cvtColor(stored_image, cv2.COLOR_BGR2GRAY)
     gray_1 = cv2.medianBlur(gray, ksize=3)
-    gray_output = cv2.adaptiveThreshold(gray_1, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 9, 5)
+    # blockSize = Size of the pixel neighborhood used for thresholding (must be odd) (45 was looking good)
+    #C = constant subtracted from the mean
+    gray_output = cv2.adaptiveThreshold(gray_1, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, blockSize=block_size, C=5)
     
+    # CLOSING
+    closing_kernel = np.ones((3, 3), np.uint8)
+    gray_output = cv2.morphologyEx(gray_output, cv2.MORPH_CLOSE, closing_kernel)
+
     # ERODE
-    gray_output = cv2.erode(gray_output, kernel, iterations=1)
+    erosion_kernel = np.ones((kernel_size, kernel_size), np.uint8)
+    gray_output = cv2.erode(gray_output, erosion_kernel, iterations=1)
     
-    # COLOR
-    color_output = cv2.medianBlur(stored_image, ksize=3)
+    # COLOR 
+    # d = diameter of pixels filtered
+    # sigmaColor (0-300) = how much to blur colors (lower = less blurred)
+    # sigmaSpace (0-300) = how far away pixels can be to impact blur
+    color_output = cv2.bilateralFilter(stored_image, d=5, sigmaColor=100, sigmaSpace=100)
+    #color_output = cv2.medianBlur(stored_image, ksize=3)
     
     # CARTOON
     cartoon = cv2.bitwise_and(color_output, color_output, mask=gray_output)
     
     _, buffer = cv2.imencode('.png', cartoon)
+   # _, buffer = cv2.imencode('.png', gray_output)
+    
     return send_file(BytesIO(buffer.tobytes()), mimetype='image/png')
 
 if __name__ == '__main__':
