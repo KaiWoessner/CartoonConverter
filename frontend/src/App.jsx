@@ -95,55 +95,52 @@ function App() {
 
   return (
     <div className="App">
-      <h2>Upload a PNG or HEIC file</h2>
-      <input type="file" accept="image/png, image/heic" onChange={handleUpload} />
-
-      {/* Slider */}
-      <div>
-        <label>Kernel Size: {kernelSize} x {kernelSize}</label>
-        <input
-          type="range"
-          min="1"
-          max="9"
-          step="1"
-          value={kernelSize}
-          onChange={handleKernelSlider}
-        />
-      </div>
-      <div>
-        <label>Block Size: {blockSize} x {blockSize}</label>
-        <input
-          type="range"
-          min="1"
-          max="69"
-          step="2"
-          value={blockSize}
-          onChange={handleBlockSlider}
-        />
-      </div>
-
-      {/* Image container */}
-      <div className="image-container">
-
-        {/* Original Image */}
-        {image && (
-          <div className="image-box">
-            <h4>Original:</h4>
-            <img src={image} alt="original" width="300" />
+      <div className="flex-container"> {/* Container for columns */}
+        {/* Options Column */}
+        <div className="column options">
+          <h2>Upload a PNG or HEIC file</h2>
+          <input type="file" accept="image/png, image/heic" onChange={handleUpload} />
+  
+          <div>
+            <label>Kernel Size: {kernelSize} x {kernelSize}</label>
+            <input
+              type="range"
+              min="1"
+              max="9"
+              step="1"
+              value={kernelSize}
+              onChange={handleKernelSlider}
+            />
           </div>
-        )}
-
-        {/* Processed Image */}
-        {result && (
-          <div className="image-box">
-            <h4>Processed Image:</h4>
-            <img src={result} alt="processed" width="300" />
+  
+          <div>
+            <label>Block Size: {blockSize} x {blockSize}</label>
+            <input
+              type="range"
+              min="1"
+              max="69"
+              step="2"
+              value={blockSize}
+              onChange={handleBlockSlider}
+            />
           </div>
-        )}
+        </div>
+  
+        {/* Original Image Column */}
+        <div className="column image-box">
+          <h4>Original:</h4>
+          {image && <img src={image} alt="original" />}
+        </div>
+  
+        {/* Processed Image Column */}
+        <div className="column image-box">
+          <h4>Processed:</h4>
+          {result && <img src={result} alt="processed" />}
+        </div>
       </div>
-
     </div>
   );
+  
 }
 
 export default App;

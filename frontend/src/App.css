@@ -47,14 +47,43 @@
 /* APP LOOKS */
 /**********************************************************/
 
-.image-container {
+
+/*.image-container {    - Replaced Content
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 20px; /* Space between the images */
-}
+  gap: 20px; /* Space between the images
 
 .image-box {
   text-align: center;
+} */
+
+/* Added By Ben */
+.flex-container { /* Contains the 3 columns (options, original image, processed image) */
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 30px;
+  padding: 0 20px;
 }
 
+.column { /* Container for each column */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.options { /* Options align to left instead of center */
+  align-items: flex-start;
+}
+
+.image-box {
+  margin-top: 20px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
