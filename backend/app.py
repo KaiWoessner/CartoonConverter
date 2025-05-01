@@ -7,69 +7,73 @@ import numpy as np
 app = Flask(__name__)
 CORS(app)
 
-stored_image = None
+# initialize image global variable
+image = None
 
+# When image receieved from frontend
 @app.route('/upload', methods=['POST'])
-def upload_file():
+def uploadImage():
+    # Extract image from frontend form data
+    global image
+    image = request.files['image']
     
-    print("UPLOADED")
-    global stored_image
-    file = request.files['file']
-   # kernel_size = int(request.form.get('kernelSize', 17))
-    
-   # print(f"Received file: {file.filename} with kernel size: {kernel_size}")
-    
-    if file.filename.endswith('.png'):
+    # If image is PNG, convert to image array
+    if image.filename.endswith('.png'):
         in_memory_file = BytesIO()
-        file.save(in_memory_file)
+        image.save(in_memory_file)
         data = np.frombuffer(in_memory_file.getvalue(), dtype=np.uint8)
-        stored_image = cv2.imdecode(data, cv2.IMREAD_COLOR)
+        image = cv2.imdecode(data, cv2.IMREAD_COLOR)
         return jsonify({'message': 'Image uploaded'}), 200
     
     return 'Invalid file type', 400
 
-@app.route('/process', methods=['POST'])
-def apply_erosion():
-    print("PROCESSED")
-    
-    global stored_image
-    if stored_image is None:
-        return jsonify({'error': 'No image uploaded'}), 400
-    
-    data = request.get_json()
-    kernel_size = int(data.get('kernelSize', 17))
-    block_size = int(data.get('blockSize', 35))
-    
-   # print("Applying erosion with kernel size:", kernel_size)
-    
-    # GRAYSCALE THRESHOLDING (convert to grayscale, perform median blur, adaptive threshold)
-    gray = cv2.cvtColor(stored_image, cv2.COLOR_BGR2GRAY)
-    gray_1 = cv2.medianBlur(gray, ksize=3)
-    # blockSize = Size of the pixel neighborhood used for thresholding (must be odd) (45 was looking good)
-    #C = constant subtracted from the mean
-    gray_output = cv2.adaptiveThreshold(gray_1, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, blockSize=block_size, C=5)
-    
-    # CLOSING
-    closing_kernel = np.ones((3, 3), np.uint8)
-    gray_output = cv2.morphologyEx(gray_output, cv2.MORPH_CLOSE, closing_kernel)
+# Run cartoon pipeline
+@app.route('/cartoon', methods=['POST'])
+def apply_cartoon():
+    global image
 
-    # ERODE
-    erosion_kernel = np.ones((kernel_size, kernel_size), np.uint8)
-    gray_output = cv2.erode(gray_output, erosion_kernel, iterations=1)
+    # Extract slider values from frontend form data json
+    data = request.get_json()
+    thickness = int(data.get('thickness', 3))
+    intensity = int(data.get('intensity', 35))
+    threshold = int(data.get('threshold', 1))
     
-    # COLOR 
-    # d = diameter of pixels filtered
-    # sigmaColor (0-300) = how much to blur colors (lower = less blurred)
-    # sigmaSpace (0-300) = how far away pixels can be to impact blur
-    color_output = cv2.bilateralFilter(stored_image, d=5, sigmaColor=100, sigmaSpace=100)
-    #color_output = cv2.medianBlur(stored_image, ksize=3)
+    # print("Thickness", thickness)
+    # print("Intensity", intensity)
+    # print("Threshold", threshold)
     
-    # CARTOON
-    cartoon = cv2.bitwise_and(color_output, color_output, mask=gray_output)
+    # ============ CARTOON PIPELINE ==============
     
+    # 1. Convert initial image to grayscale
+    grayscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    
+    # 2. Convert grayscale image to binary (black and white) using thresholding
+    #       blockSize = Size of the pixel neighborhood used for thresholding (must be odd) (45 was looking good)
+    #       C = constant subtracted from the mean
+    binary = cv2.adaptiveThreshold(grayscale, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, blockSize= intensity, C= threshold)
+    
+    # 3. Apply closing to binary image to remove black specks
+    closingKernel = np.ones((3, 3), np.uint8)
+    binary = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, closingKernel)
+
+    # 4. Apply erosion to binary image to thicken edges
+    erosionKernel = np.ones((thickness, thickness), np.uint8)
+    binary = cv2.erode(binary, erosionKernel, iterations=1)
+    
+    # 5. Apply edge-preservation smoothing to initial colored image based on intensity of nearby pixels
+    #       d = diameter of pixels filtered
+    #       sigmaColor (0-300) = how much to blur colors (lower = less blurred)
+    #       sigmaSpace (0-300) = how far away pixels can be to impact blur
+    color = cv2.bilateralFilter(image, d=5, sigmaColor=100, sigmaSpace=100)
+    
+    # 6. Apply bitwise and to overlap smoothed color image with binary image
+    cartoon = cv2.bitwise_and(color, color, mask=binary)
+    
+    # 7. Convert processed image array back to PNG
     _, buffer = cv2.imencode('.png', cartoon)
-   # _, buffer = cv2.imencode('.png', gray_output)
+   # _, buffer = cv2.imencode('.png', binary)
     
+    # 8. Send processed image back to frontend
     return send_file(BytesIO(buffer.tobytes()), mimetype='image/png')
 
 if __name__ == '__main__':
