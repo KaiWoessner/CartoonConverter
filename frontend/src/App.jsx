@@ -153,15 +153,19 @@ function App() {
         </div>
   
         {/* Original Image Column */}
-        <div className="column image-box">
+        <div className="column">
           <h4>Original:</h4>
-          {initialImage && <img src={initialImage} alt="original" />}
+          <div className="image-box">
+            {initialImage && <img src={initialImage} alt="original" />}
+          </div>
         </div>
   
         {/* Processed Image Column */}
-        <div className="column image-box">
-          <h4>Processed:</h4>
-          {resultImage && <img src={resultImage} alt="processed" />}
+        <div className="column">
+          <h4>Cartoonized:</h4>
+          <div className="image-box">
+            {resultImage && <img src={resultImage} alt="processed" />}
+          </div>
         </div>
       </div>
     </div>

@@ -1,17 +1,26 @@
+html, body {
+  margin: 0;    /* remove default margin & padding*/
+  padding: 0;
+  overflow: hidden;   /* prevents scrollbar */
+  height: 100%;   /* stretches body to width of screen */
+  background-color: #eff5ff; /* Makes sure background is consistent dependent of browser or darkmode */
+  color: #060a3f;            /* Ensures consistent text color */
+}
+
 #root {
-  max-width: 1280px;
+  max-width: 100vw;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  height: 100%;
 }
 
 /* Added By Ben */
 .flex-container { /* Contains the 3 columns (options, original image, processed image) */
   display: flex;
   justify-content: space-between;
+  height: 100vh;
   gap: 20px;
-  margin-top: 30px;
-  padding: 0 20px;
+  box-sizing: border-box; /* ensures padding is included in the height */
+  padding: 20px;           /* optional, but avoid margin-top */
 }
 
 .column { /* Container for each column */
@@ -27,12 +36,25 @@
 
 .image-box {
   width: 40vw;
+  height: 100%;
   margin-top: 20px;
 
-  border: 3px solid #5f79ff;   /* Border */
+  border: 3px solid #00157d;   /* Border */
   border-radius: 12px;      /* Rounds Corners */
-  background-color: #515050; /* Background */
-
+  background-color: #e3e3e3; /* Background */
+  /*
+    Im not entirely sure how the checker pattern works tbh. Generally, it renders diagonal squares alternating between colored and transparent
+  and then does it again but mirrored (45deg vs. -45deg). Then for some reason it does this again with different values for the gradient.
+  The 25% for the first means it does gray for the from 0-25% and then transparent from 25-100%. Then transparent from 0-75% and gray from 75-100%.
+  The percentage relates to the path of the gradient for example in the first 2 lines it is gray for 25% of the path and then switches to transparent.
+  */
+  background-image:
+    linear-gradient(45deg, #ccc 25%, transparent 25%),
+    linear-gradient(-45deg, #ccc 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #ccc 75%),
+    linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 20px 20px;                                 /* Tile Size */
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;    /* Offset for tiles to line up propery */
 }
 
 img {
