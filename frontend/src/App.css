@@ -48,7 +48,7 @@ html, body, #root, .App, .flex-container {
   display:flex;
   justify-content: center;
   
-  /* Make the image not overflow below */
+  /* Make the image not overflow at the bottom */
   max-height: 90%;
 
   border: 3px solid #00157d;   /* Border */
