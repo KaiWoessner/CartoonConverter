@@ -87,6 +87,18 @@ img {
   width: 100%
 }
 
+.input { /* for slider */
+  width: 25px;
+  padding: 1px;
+  margin-left: 10px;
+  border-radius: 5px;
+  font-size: 15px;
+  text-align: center;
+  transition: all 0.3s ease;
+  background-color: #eff5ff;
+  color: #010211;            
+}
+
 
 /* Drag and drop area */
 .drop-zone {
