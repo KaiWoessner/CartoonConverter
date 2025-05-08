@@ -144,38 +144,45 @@ function App() {
   
           <div>
             <label>Edge Thickness: {thickness}</label>
-            <input
-              type="range"
-              min="1"
-              max="9"
-              step="1"
-              value={thickness}
-              onChange={handleThicknessSlider}
-            />
+            <div className="slider">
+              <input
+                type="range"
+                min="1"
+                max="9"
+                step="1"
+                value={thickness}
+                onChange={handleThicknessSlider}
+              />
+            </div>
+            
           </div>
   
           <div>
             <label>Edge Intensity: {intensity}</label>
-            <input
-              type="range"
-              min="3"
-              max="99"
-              step="2"
-              value={intensity}
-              onChange={handleIntensitySlider}
-            />
+            <div className="slider">
+              <input
+                type="range"
+                min="3"
+                max="99"
+                step="2"
+                value={intensity}
+                onChange={handleIntensitySlider}
+              />
+            </div>
           </div>
 
           <div>
             <label>Edge Threshold: {threshold}</label>
-            <input
-              type="range"
-              min="1"
-              max="15"
-              step="1"
-              value={threshold}
-              onChange={handleThresholdSlider}
-            />
+            <div className="slider">
+              <input
+                type="range"
+                min="1"
+                max="15"
+                step="1"
+                value={threshold}
+                onChange={handleThresholdSlider}
+              />
+            </div>
           </div>
 
 
