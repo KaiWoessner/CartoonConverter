@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import './App.css';
 import heic2any from "heic2any";
 
@@ -10,10 +10,14 @@ function App() {
   const [thickness, setThickness] = useState(3);
   const [intensity, setIntensity] = useState(35);
   const [threshold, setThreshold] = useState(1);
+  const [originalFileName, setOriginalFileName] = useState(null);
+
+  const fileInputRef = useRef(null);
 
   // When image uploaded, convert to PNG if necessary
   const handleUpload = async (e) => {
     let image = e.target.files[0];
+    setOriginalFileName(image.name);
   
     // If HEIC, convert to PNG
     if (image.type === "image/heic" || image.name.toLowerCase().endsWith(".heic")) {
@@ -106,14 +110,37 @@ function App() {
     }
   };
 
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "copy";
+  };
+  
+  const handleDrop = async (e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      await handleUpload({ target: { files: [file] } });
+    }
+  };
+
+  const handleClick = () => {
+    fileInputRef.current.click();
+  };
+
+
   // HTML
   return (
     <div className="App">
       <div className="flex-container"> {/* Container for columns */}
         {/* Options Column */}
         <div className="column options">
-          <h2>Upload a PNG or HEIC file</h2>
-          <input type="file" accept="image/png, image/heic" onChange={handleUpload} />
+          <h2>CARTOONIZER</h2>
+
+          <div className="drop-zone" onClick={handleClick} onDrop={handleDrop} onDragOver={handleDragOver}>
+            <p>Drag and drop an image here or click</p>
+            <input type="file" accept="image/png, image/heic" onChange={handleUpload} ref={fileInputRef} style={{ display: 'none' }} />
+          </div>
   
           <div>
             <label>Edge Thickness: {thickness}</label>
@@ -150,18 +177,28 @@ function App() {
               onChange={handleThresholdSlider}
             />
           </div>
+
+
+          {resultImage && (
+              <a href={resultImage} download={`${originalFileName.replace(/\.[^/.]+$/, "")}_cartoonized.png`} className="download-button">
+                Download Cartoon
+              </a>)}
         </div>
   
         {/* Original Image Column */}
-        <div className="column image-box">
+        <div className="column image-column">
           <h4>Original:</h4>
-          {initialImage && <img src={initialImage} alt="original" />}
+          <div className="image-box">
+            {initialImage && <img src={initialImage} alt="original" />}
+          </div>
         </div>
   
         {/* Processed Image Column */}
-        <div className="column image-box">
-          <h4>Processed:</h4>
-          {resultImage && <img src={resultImage} alt="processed" />}
+        <div className="column image-column">
+          <h4>Cartoonized:</h4>
+          <div className="image-box">
+            {resultImage && <img src={resultImage} alt="processed" />}
+          </div>
         </div>
       </div>
     </div>
