@@ -18,11 +18,12 @@ def uploadImage():
     image = request.files['image']
     
     # If image is PNG, convert to image array
-    if image.filename.endswith('.png'):
+    if image.filename.endswith(('.png', '.jpg', '.jpeg')):
         in_memory_file = BytesIO()
         image.save(in_memory_file)
         data = np.frombuffer(in_memory_file.getvalue(), dtype=np.uint8)
         image = cv2.imdecode(data, cv2.IMREAD_COLOR)
+        
         return jsonify({'message': 'Image uploaded'}), 200
     
     return 'Invalid file type', 400
@@ -43,7 +44,6 @@ def apply_cartoon():
     # print("Threshold", threshold)
     
     # ============ CARTOON PIPELINE ==============
-    
     # 1. Convert initial image to grayscale
     grayscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     
@@ -70,7 +70,8 @@ def apply_cartoon():
     cartoon = cv2.bitwise_and(color, color, mask=binary)
     
     # 7. Convert processed image array back to PNG
-    _, buffer = cv2.imencode('.png', cartoon)
+    cartoon_bgra = cv2.cvtColor(cartoon, cv2.COLOR_BGR2BGRA)
+    _, buffer = cv2.imencode('.png', cartoon_bgra)
    # _, buffer = cv2.imencode('.png', binary)
     
     # 8. Send processed image back to frontend
