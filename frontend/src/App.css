@@ -131,15 +131,15 @@ img {
 
 /* Add spacing above all three sliders */
 .slider-container:nth-of-type(3) {
-  margin-top: 10%; /* space above Edge Thickness */
+  margin-top: 5%; /* space above Edge Thickness */
 }
 
 .slider-container:nth-of-type(4) {
-  margin-top: 10%; /* space above Edge Intensity */
+  margin-top: 5%; /* space above Edge Intensity */
 }
 
 .slider-container:nth-of-type(5) {
-  margin-top: 10%; /* space above Edge Threshold */
+  margin-top: 5%; /* space above Edge Threshold */
 }
 
 
@@ -155,8 +155,32 @@ img {
 }
 
 .slider-container input[type="range"]{
+  -webkit-appearance: none;
   width: 100%;
+  background: transparent;
 }
+
+.slider-container input[type="range"]::-webkit-slider-runnable-track{
+  height: 40px;
+  background: #5f79ff;
+  border-radius: 100px;
+  box-shadow: 0 0 10px #5f79ff; /* GLOW effect */
+
+}
+
+/* === THUMB === */
+.slider-container input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 40px;
+  width: 40px;
+  border-radius: 100%;
+  background: #00157d;
+  box-shadow: 0 0 10px #00157d; /* GLOW */
+  margin-top: 0px;
+  transition: box-shadow 0.3s ease;
+}
+
+
 .slider-label {
   width: 100%;
   margin-bottom: 12px;
