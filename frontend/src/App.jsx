@@ -1,4 +1,5 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { saveToIDB, getFromIDB } from './db';
 import './App.css';
 import heic2any from "heic2any";
 
@@ -7,9 +8,16 @@ function App() {
   const [initialImage, setInitalImage] = useState(null);
   const [imageUploaded, setImageUploaded] = useState(false);
   const [resultImage, setResultImage] = useState(null);
-  const [thickness, setThickness] = useState(3);
-  const [intensity, setIntensity] = useState(35);
-  const [threshold, setThreshold] = useState(1);
+  // If state variables already saved default to them otherwise use defaults
+  const [thickness, setThickness] = useState(() =>
+    parseInt(localStorage.getItem("thickness")) || 3
+  );
+  const [intensity, setIntensity] = useState(() =>
+    parseInt(localStorage.getItem("intensity")) || 35
+  );
+  const [threshold, setThreshold] = useState(() =>
+    parseInt(localStorage.getItem("threshold")) || 1
+  );
   const [originalFileName, setOriginalFileName] = useState(null);
 
   const fileInputRef = useRef(null);
@@ -18,6 +26,9 @@ function App() {
   const handleUpload = async (e) => {
     let image = e.target.files[0];
     setOriginalFileName(image.name);
+
+
+    //let imageToUpload;
   
     // If HEIC, convert to PNG
     if (image.type === "image/heic" || image.name.toLowerCase().endsWith(".heic")) {
@@ -30,22 +41,50 @@ function App() {
         });
   
         const convertedImage = new File([blob],image.name.replace(/\.heic$/i, ".png"),{ type: "image/png" });
-  
-        await uploadImage(convertedImage);
+
+        //imageToUpload = convertedImage;
+
+        // Save to localStorage
+        //saveToLocalStorage(convertedImage);
+        
+       await uploadImage(convertedImage);
       };
   
       reader.readAsArrayBuffer(image);
       return;
     }
+    //else {
+      // imageToUpload = image;
+      // saveToLocalStorage(imageToUpload);
+    //}
     
     // If PNG, continue to uploadImage
-    await uploadImage(image);
+   await uploadImage(image);
   };
+
+
+  // const saveToLocalStorage = (image) => {
+  //   const reader = new FileReader();
+  //   reader.onloadend = async () => {
+  //     localStorage.setItem("imageBase64", reader.result);
+  //     localStorage.setItem("originalImageName", image.name);
+  //     await uploadImage(image);
+  //   };
+  //   reader.readAsDataURL(image);
+  // };
   
   // When image uploaded and type handled
   const uploadImage = async (image) => {
     // Converts initial image to binary object that is able to be displayed
     setInitalImage(URL.createObjectURL(image));
+
+    // save image in IDB
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      await saveToIDB('imageBase64', reader.result);
+      await saveToIDB('originalImageName', image.name);
+    };
+    reader.readAsDataURL(image);
   
     // Send initial image to backend
     const formData = new FormData();
@@ -84,32 +123,30 @@ function App() {
   const handleThicknessSlider = (e) => {
     const thick = parseInt(e.target.value);
     setThickness(thick);
+    //setInputValue(thick.toString());  // Sync input value
     //console.log("Thickness:", thick);
     if (imageUploaded) {
       updateCartoon(thick, intensity, threshold);
     }
   };
   
-  // Update intensity variable when slider updated
   const handleIntensitySlider = (e) => {
     const intense = parseInt(e.target.value);
     setIntensity(intense);
-    //console.log("Intensity:", intense);
+    //setIntensityInputValue(intense);
     if (imageUploaded) {
       updateCartoon(thickness, intense, threshold);
     }
   };
 
-  // Update threshold variable when slider updated
   const handleThresholdSlider = (e) => {
     const thresh = parseInt(e.target.value);
     setThreshold(thresh);
-    //console.log("Threshold:", thresh);
+    //setThresholdInputValue(thresh);
     if (imageUploaded) {
       updateCartoon(thickness, intensity, thresh);
     }
   };
-
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -128,22 +165,85 @@ function App() {
     fileInputRef.current.click();
   };
 
+  //*********************************
+  // LOCAL STORAGE + INDEXEDDB
+  //*********************************
+  
+  // Save and updates slider variables on change
+  useEffect(() => {
+    localStorage.setItem('thickness', thickness);
+    localStorage.setItem('intensity', intensity);
+    localStorage.setItem('threshold', threshold);
+  }, [thickness, intensity, threshold]);
+
+  // retrieves saved local storage items on load
+  useEffect(() => {
+    (async () => {
+      const savedThickness = localStorage.getItem('thickness');
+      const savedIntensity = localStorage.getItem('intensity');
+      const savedThreshold = localStorage.getItem('threshold');
+  
+      const savedBase64 = await getFromIDB('imageBase64');
+      const savedFileName = await getFromIDB('originalImageName');
+  
+      if (savedThickness) setThickness(parseInt(savedThickness));
+      if (savedIntensity) setIntensity(parseInt(savedIntensity));
+      if (savedThreshold) setThreshold(parseInt(savedThreshold));
+  
+      if (savedBase64 && savedFileName) {
+        setInitalImage(savedBase64);
+        setOriginalFileName(savedFileName);
+        setImageUploaded(true);
+  
+        // Convert base64 back to image and upload
+        const byteString = atob(savedBase64.split(',')[1]);
+        const mimeString = savedBase64.split(',')[0].split(':')[1].split(';')[0];
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        for (let i = 0; i < byteString.length; i++) {
+          ia[i] = byteString.charCodeAt(i);
+        }
+        const blob = new Blob([ab], { type: mimeString });
+        const image = new File([blob], savedFileName, { type: mimeString });
+  
+        const formData = new FormData();
+        formData.append("image", image);
+  
+        const res = await fetch("http://127.0.0.1:5000/upload", {
+          method: "POST",
+          body: formData,
+        });
+  
+        if (res.ok) {
+          updateCartoon(
+            parseInt(savedThickness) || 3,
+            parseInt(savedIntensity) || 35,
+            parseInt(savedThreshold) || 1
+          );
+        }
+      }
+    })();
+  }, []);
+
 
   // HTML
   return (
     <div className="App">
-      <div className="flex-container"> {/* Container for columns */}
-        {/* Options Column */}
+      <div className="flex-container">
         <div className="column options">
-          <h2>CARTOONIZER</h2>
-
-          <div className="drop-zone" onClick={handleClick} onDrop={handleDrop} onDragOver={handleDragOver}>
-            <p>Drag and drop an image here or click</p>
-            <input type="file" accept="image/png, image/heic" onChange={handleUpload} ref={fileInputRef} style={{ display: 'none' }} />
+          <div className="title-container">
+            <h2>CARTOONIZER</h2>
           </div>
-  
-          <div>
-            <label>Edge Thickness: {thickness}</label>
+
+          <div className="upload-container">
+            <div className="drop-zone" onClick={handleClick} onDrop={handleDrop} onDragOver={handleDragOver}>
+              <p>Drag and drop an image here or click</p>
+              <input type="file" accept="image/png, image/heic" onChange={handleUpload} ref={fileInputRef} style={{ display: 'none' }} />
+            </div>
+          </div>
+
+          <div className="slider-container">
+            <div className="slider-label">Edge Thickness: {thickness}</div>
             <input
               type="range"
               min="1"
@@ -153,9 +253,9 @@ function App() {
               onChange={handleThicknessSlider}
             />
           </div>
-  
-          <div>
-            <label>Edge Intensity: {intensity}</label>
+
+          <div className="slider-container">
+            <div className="slider-label">Edge Intensity: {intensity}</div>
             <input
               type="range"
               min="3"
@@ -166,8 +266,8 @@ function App() {
             />
           </div>
 
-          <div>
-            <label>Edge Threshold: {threshold}</label>
+          <div className="slider-container">
+            <div className="slider-label">Edge Threshold: {threshold}</div>
             <input
               type="range"
               min="1"
@@ -178,13 +278,19 @@ function App() {
             />
           </div>
 
-
           {resultImage && (
-              <a href={resultImage} download={`${originalFileName.replace(/\.[^/.]+$/, "")}_cartoonized.png`} className="download-button">
+            <div className="download-container">
+              <a
+                href={resultImage}
+                download={`${originalFileName.replace(/\.[^/.]+$/, "")}_cartoonized.png`}
+                className="download-button"
+              >
                 Download Cartoon
-              </a>)}
-        </div>
-  
+              </a>
+            </div>
+          )}
+      </div>
+
         {/* Original Image Column */}
         <div className="column image-column">
           <h4>Original:</h4>
