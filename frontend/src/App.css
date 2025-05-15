@@ -180,6 +180,9 @@ img {
   transition: box-shadow 0.3s ease;
 }
 
+.slider-container input[type="range"]:hover::-webkit-slider-thumb {
+  box-shadow: 0 0 30px #00157d;
+}
 
 .slider-label {
   width: 100%;
