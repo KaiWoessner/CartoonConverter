@@ -134,9 +134,8 @@ function App() {
     <div className="App">
       <div className="flex-container"> {/* Container for columns */}
         {/* Options Column */}
-        <div className="column options">
+        {/* <div className="column options">
           <h2>CARTOONIZER</h2>
-
           <div className="drop-zone" onClick={handleClick} onDrop={handleDrop} onDragOver={handleDragOver}>
             <p>Drag and drop an image here or click</p>
             <input type="file" accept="image/png, image/heic" onChange={handleUpload} ref={fileInputRef} style={{ display: 'none' }} />
@@ -180,10 +179,132 @@ function App() {
 
 
           {resultImage && (
-              <a href={resultImage} download={`${originalFileName.replace(/\.[^/.]+$/, "")}_cartoonized.png`} className="download-button">
+            <div className = "download-container">
+              <a
+                href={resultImage}
+                download={`${originalFileName.replace(/\.[^/.]+$/, "")}_cartoonized.png`}
+                className="download-button"
+              >
                 Download Cartoon
-              </a>)}
+              </a>
+            </div>
+          )}
+        </div> */}
+        <div className="column options">
+        <div className="title-container">
+          <h2>CARTOONIZER</h2>
         </div>
+
+        <div className="upload-container">
+          <div className="drop-zone" onClick={handleClick} onDrop={handleDrop} onDragOver={handleDragOver}>
+            <p>Drag and drop an image here or click</p>
+            <input type="file" accept="image/png, image/heic" onChange={handleUpload} ref={fileInputRef} style={{ display: 'none' }} />
+          </div>
+        </div>
+
+        {/* <div className="slider-container">
+          <div className="slider-label">Edge Thickness: {thickness}</div>
+          <input
+            type="range"
+            min="1"
+            max="9"
+            step="1"
+            value={thickness}
+            onChange={handleThicknessSlider}
+          />
+        </div>
+
+
+        <div className="slider-container">
+          <div className="slider-label">Edge Intensity: {intensity}</div>
+          <input
+            type="range"
+            min="3"
+            max="99"
+            step="2"
+            value={intensity}
+            onChange={handleIntensitySlider}
+          />
+        </div>
+
+
+        <div className="slider-container">
+          <div className="slider-label">Edge Threshold: {threshold}</div>
+          <input
+            type="range"
+            min="1"
+            max="15"
+            step="1"
+            value={threshold}
+            onChange={handleThresholdSlider}
+          />
+        </div>
+
+
+        {resultImage && (
+          <div className="download-container">
+            <a
+              href={resultImage}
+              download={`${originalFileName.replace(/\.[^/.]+$/, "")}_cartoonized.png`}
+              className="download-button"
+            >
+              Download Cartoon
+            </a>
+          </div>
+        )} */}
+        
+          <div className="slider-container">
+            <div className="slider-label">Edge Thickness: {thickness}</div>
+            <input
+              type="range"
+              min="1"
+              max="9"
+              step="1"
+              value={thickness}
+              onChange={handleThicknessSlider}
+            />
+          </div>
+
+          <div className="slider-container">
+            <div className="slider-label">Edge Intensity: {intensity}</div>
+            <input
+              type="range"
+              min="3"
+              max="99"
+              step="2"
+              value={intensity}
+              onChange={handleIntensitySlider}
+            />
+          </div>
+
+          <div className="slider-container">
+            <div className="slider-label">Edge Threshold: {threshold}</div>
+            <input
+              type="range"
+              min="1"
+              max="15"
+              step="1"
+              value={threshold}
+              onChange={handleThresholdSlider}
+            />
+          </div>
+
+          {resultImage && (
+            <div className="download-container">
+              <a
+                href={resultImage}
+                download={`${originalFileName.replace(/\.[^/.]+$/, "")}_cartoonized.png`}
+                className="download-button"
+              >
+                Download Cartoon
+              </a>
+            </div>
+          )}
+        
+
+      </div>
+
+        
   
         {/* Original Image Column */}
         <div className="column image-column">

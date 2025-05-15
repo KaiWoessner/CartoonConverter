@@ -2,9 +2,9 @@
 
 # Start Flask backend
 cd backend
-source venv/bin/activate
+#source venv/bin/activate
 echo "Starting backend..."
-python app.py &
+python3 app.py &
 cd ..
 
 # Start React frontend
