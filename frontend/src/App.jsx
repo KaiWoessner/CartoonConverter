@@ -11,9 +11,6 @@ function App() {
   const [intensity, setIntensity] = useState(35);
   const [threshold, setThreshold] = useState(1);
   const [originalFileName, setOriginalFileName] = useState(null);
-  const [thicknessInputValue, setInputValue] = useState("3");
-  const [intensityInputValue, setIntensityInputValue] = useState(35);
-  const [thresholdInputValue, setThresholdInputValue] = useState(1);
 
   const fileInputRef = useRef(null);
 
@@ -93,24 +90,6 @@ function App() {
       updateCartoon(thick, intensity, threshold);
     }
   };
-
-  const handleThicknessInput = (e) => {
-    const value = e.target.value;
-
-    // Allow empty string for backspacing
-    if (value === "") {
-      setInputValue("");
-      return;
-    }
-
-    const numericValue = parseInt(value);
-
-    // Update only if value is within range
-    if (!isNaN(numericValue) && numericValue >= 1 && numericValue <= 9) {
-      setThickness(numericValue);
-      setInputValue(value);
-    }
-  };
   
   const handleIntensitySlider = (e) => {
     const intense = parseInt(e.target.value);
@@ -118,19 +97,6 @@ function App() {
     setIntensityInputValue(intense);
     if (imageUploaded) {
       updateCartoon(thickness, intense, threshold);
-    }
-  };
-
-  const handleIntensityInput = (e) => {
-    const value = e.target.value;
-    if (value === "") {
-      setIntensityInputValue("");
-      return;
-    }
-    const numericValue = parseInt(value);
-    if (!isNaN(numericValue) && numericValue >= 3 && numericValue <= 99) {
-      setIntensity(numericValue);
-      setIntensityInputValue(value);
     }
   };
 
@@ -142,21 +108,6 @@ function App() {
       updateCartoon(thickness, intensity, thresh);
     }
   };
-
-  const handleThresholdInput = (e) => {
-    const value = e.target.value;
-    if (value === "") {
-      setThresholdInputValue("");
-      return;
-    }
-    const numericValue = parseInt(value);
-    if (!isNaN(numericValue) && numericValue >= 1 && numericValue <= 15) {
-      setThreshold(numericValue);
-      setThresholdInputValue(value);
-    }
-  };
-
-
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -191,7 +142,7 @@ function App() {
   
           <div>
             <label>Edge Thickness:</label>
-            <input
+            {/* <input
                 type="number"
                 min="1"
                 max="9"
@@ -199,7 +150,7 @@ function App() {
                 onChange={handleThicknessInput}
                 style={{ marginLeft: '10px' }}
                 className="input"
-              />
+              /> */}
             <div className="slider">
               <input
                 type="range"
@@ -215,7 +166,7 @@ function App() {
   
           <div>
             <label>Edge Intensity:</label>
-            <input
+            {/* <input
               type="number"
               min="3"
               max="99"
@@ -223,7 +174,7 @@ function App() {
               onChange={handleIntensityInput}
               style={{ marginLeft: '10px' }}
               className="input"
-            />
+            /> */}
             <div className="slider">
               <input
                 type="range"
@@ -238,7 +189,7 @@ function App() {
 
           <div>
             <label>Edge Threshold:</label>
-            <input
+            {/* <input
               type="number"
               min="1"
               max="15"
@@ -246,7 +197,7 @@ function App() {
               onChange={handleThresholdInput}
               style={{ marginLeft: '10px' }}
               className="input"
-            />
+            /> */}
             <div className="slider">
               <input
                 type="range"

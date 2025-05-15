@@ -31,16 +31,17 @@ body {
   min-height: 100vh;
 }
 
-h1 {
+/* Commented out cause broke formatting */
+/* h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
 
-h2 {  /* title style */
+h2 {
   font-size: 3.2em;
   line-height: 1.1;
   font-family: 'Fredoka One', sans-serif;
-}
+} */
 
 button {
   border-radius: 8px;
