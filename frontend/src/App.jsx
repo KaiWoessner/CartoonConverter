@@ -182,7 +182,7 @@ function App() {
       <div className="flex-container"> {/* Container for columns */}
         {/* Options Column */}
         <div className="column options">
-          <h2>CARTOONIZER</h2>
+          <img src="/assets/Cartoonizer Logo.png" className='title_img' />
 
           <div className="drop-zone" onClick={handleClick} onDrop={handleDrop} onDragOver={handleDragOver}>
             <p>Drag and drop an image here or click</p>
@@ -268,7 +268,7 @@ function App() {
   
         {/* Original Image Column */}
         <div className="column image-column">
-          <h4>Original:</h4>
+          <img src="/assets/Original Text.png" className='label_img'/>
           <div className="image-box">
             {initialImage && <img src={initialImage} alt="original" />}
           </div>
@@ -276,7 +276,7 @@ function App() {
   
         {/* Processed Image Column */}
         <div className="column image-column">
-          <h4>Cartoonized:</h4>
+          <img src="/assets/Cartoonized Text.png" className='label_img'/>
           <div className="image-box">
             {resultImage && <img src={resultImage} alt="processed" />}
           </div>
