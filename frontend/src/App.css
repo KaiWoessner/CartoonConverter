@@ -4,8 +4,8 @@ html, body {
   overflow: hidden;   /* prevents scrollbar */
   height: 100%;   /* stretches body to width of screen */
   width: 100%;
-  background-color: #eff5ff; /* Makes sure background is consistent dependent of browser or darkmode */
-  color: #060a3f;            /* Ensures consistent text color */
+  background-color: #fffaf9; /* Makes sure background is consistent dependent of browser or darkmode */
+  color: #3f1e06;            /* Ensures consistent text color */
 }
 .download-container {
   margin-top: 20px;
@@ -63,7 +63,7 @@ html, body, #root, .App, .flex-container {
   /* Make the image not overflow at the bottom */
   max-height: 90%;
 
-  border: 3px solid #00157d;   /* Border */
+  border: 3px solid #7d0000;   /* Border */
   border-radius: 12px;      /* Rounds Corners */
   background-color: #e3e3e3; /* Background */
   /*
@@ -95,6 +95,15 @@ img {
   /* margin-bottom: 0px; */
 }
 
+.title_img {
+  height: 200px;
+}
+
+.label_img {
+  height: 30px;
+  margin-bottom: 10px;
+}
+
 .slider {
   width: 100%
 }
@@ -116,11 +125,11 @@ img {
 /* .drop-zone {
   width: 50%;
   padding: 40px;
-  border: 2px dashed #5f79ff;
+  border: 2px dashed #ff5f5f;
   border-radius: 12px;
-  background-color: #f0f4ff;
+  background-color: #fff0f0;
   text-align: center;
-  color: #00157d;
+  color: #360000;
   margin-bottom: 20px;
   transition: background-color 0.2s ease;
 } */
