@@ -4,10 +4,12 @@ html, body {
   overflow: hidden;   /* prevents scrollbar */
   height: 100%;   /* stretches body to width of screen */
   width: 100%;
-  background-color: #eff5ff; /* Makes sure background is consistent dependent of browser or darkmode */
-  color: #060a3f;            /* Ensures consistent text color */
+  background-color: #fffaf9; /* Makes sure background is consistent dependent of browser or darkmode */
+  color: #3f1e06;            /* Ensures consistent text color */
 }
-
+.download-container {
+  margin-top: 20px;
+}
 
 /* Added this cause apparently this fixes the scaling problem I guess the entire
 ancestory needs to be set */
@@ -25,18 +27,28 @@ html, body, #root, .App, .flex-container {
   padding: 20px;
 }
 
-.image-column { /* Container for each column */
+.image-column { /* Container for each image column */
   display: flex;
   flex: 0 0 38%;
   flex-direction: column;
   align-items: center;
 }
 
-.options { /* Options align to left instead of center */
+.options {
+  display: flex;              /* Missing! Enables flex layout */
+  flex-direction: column;
   align-items: flex-start;
-  flex: 0 0 15%;
+  flex: 0 0 20%;
   height: 100%;
-  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+
+
+.slider-label {
+  margin-bottom: 4px;
+  font-weight: 500;
 }
 
 .image-box {
@@ -51,7 +63,7 @@ html, body, #root, .App, .flex-container {
   /* Make the image not overflow at the bottom */
   max-height: 90%;
 
-  border: 3px solid #00157d;   /* Border */
+  border: 3px solid #7d0000;   /* Border */
   border-radius: 12px;      /* Rounds Corners */
   background-color: #e3e3e3; /* Background */
   /*
@@ -83,6 +95,15 @@ img {
   /* margin-bottom: 0px; */
 }
 
+.title_img {
+  height: 200px;
+}
+
+.label_img {
+  height: 30px;
+  margin-bottom: 10px;
+}
+
 .slider {
   width: 100%
 }
@@ -101,16 +122,96 @@ img {
 
 
 /* Drag and drop area */
-.drop-zone {
+/* .drop-zone {
   width: 50%;
   padding: 40px;
+  border: 2px dashed #ff5f5f;
+  border-radius: 12px;
+  background-color: #fff0f0;
+  text-align: center;
+  color: #360000;
+  margin-bottom: 20px;
+  transition: background-color 0.2s ease;
+} */
+
+.drop-zone {
+  width: 100%;               /* Match rest of column width */
+  height: 260px;             /* Taller vertically */
+  padding: 20px;
   border: 2px dashed #5f79ff;
   border-radius: 12px;
   background-color: #f0f4ff;
   text-align: center;
   color: #00157d;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
   transition: background-color 0.2s ease;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+
+/* Add spacing above all three sliders */
+.slider-container:nth-of-type(3) {
+  margin-top: 5%; /* space above Edge Thickness */
+}
+
+.slider-container:nth-of-type(4) {
+  margin-top: 5%; /* space above Edge Intensity */
+}
+
+.slider-container:nth-of-type(5) {
+  margin-top: 5%; /* space above Edge Threshold */
+}
+
+
+.title-container,
+.upload-container,
+.slider-container{
+  margin-bottom: 10px; /* Reduce from 20px */
+  width: 100%;
+}
+.download-container {
+  margin-bottom: 12px;
+  width: 100%;
+}
+
+.slider-container input[type="range"]{
+  -webkit-appearance: none;
+  width: 100%;
+  background: transparent;
+}
+
+.slider-container input[type="range"]::-webkit-slider-runnable-track{
+  height: 40px;
+  background: #5f79ff;
+  border-radius: 100px;
+  box-shadow: 0 0 10px #5f79ff; /* GLOW effect */
+
+}
+
+/* === THUMB === */
+.slider-container input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 40px;
+  width: 40px;
+  border-radius: 100%;
+  background: #00157d;
+  box-shadow: 0 0 10px #00157d; /* GLOW */
+  margin-top: 0px;
+  transition: box-shadow 0.3s ease;
+}
+
+.slider-container input[type="range"]:hover::-webkit-slider-thumb {
+  box-shadow: 0 0 30px #00157d;
+}
+
+.slider-label {
+  width: 100%;
+  margin-bottom: 12px;
+  font-size: 14px;
 }
 
 .drop-zone:hover {

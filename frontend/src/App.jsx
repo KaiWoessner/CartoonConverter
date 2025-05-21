@@ -229,96 +229,69 @@ function App() {
   // HTML
   return (
     <div className="App">
-      <div className="flex-container"> {/* Container for columns */}
-        {/* Options Column */}
+      <div className="flex-container">
         <div className="column options">
-          <h2>CARTOONIZER</h2>
+          <img src="/assets/Cartoonizer Logo.png" className='title_img' />
 
-          <div className="drop-zone" onClick={handleClick} onDrop={handleDrop} onDragOver={handleDragOver}>
-            <p>Drag and drop an image here or click</p>
-            <input type="file" accept="image/png, image/heic" onChange={handleUpload} ref={fileInputRef} style={{ display: 'none' }} />
-          </div>
-  
-          <div>
-            <label>Edge Thickness: {thickness}</label>
-            {/* <input
-                type="number"
-                min="1"
-                max="9"
-                value={thicknessInputValue}
-                onChange={handleThicknessInput}
-                style={{ marginLeft: '10px' }}
-                className="input"
-              /> */}
-            <div className="slider">
-              <input
-                type="range"
-                min="1"
-                max="9"
-                step="1"
-                value={thickness}
-                onChange={handleThicknessSlider}
-              />
+          <div className="upload-container">
+            <div className="drop-zone" onClick={handleClick} onDrop={handleDrop} onDragOver={handleDragOver}>
+              <p>Drag and drop an image here or click</p>
+              <input type="file" accept="image/png, image/heic" onChange={handleUpload} ref={fileInputRef} style={{ display: 'none' }} />
             </div>
-            
           </div>
-  
-          <div>
-            <label>Edge Intensity: {intensity}</label>
-            {/* <input
-              type="number"
+
+          <div className="slider-container">
+            <div className="slider-label">Edge Thickness: {thickness}</div>
+            <input
+              type="range"
+              min="1"
+              max="9"
+              step="1"
+              value={thickness}
+              onChange={handleThicknessSlider}
+            />
+          </div>
+
+          <div className="slider-container">
+            <div className="slider-label">Edge Intensity: {intensity}</div>
+            <input
+              type="range"
               min="3"
               max="99"
-              value={intensityInputValue}
-              onChange={handleIntensityInput}
-              style={{ marginLeft: '10px' }}
-              className="input"
-            /> */}
-            <div className="slider">
-              <input
-                type="range"
-                min="3"
-                max="99"
-                step="2"
-                value={intensity}
-                onChange={handleIntensitySlider}
-              />
-            </div>
+              step="2"
+              value={intensity}
+              onChange={handleIntensitySlider}
+            />
           </div>
 
-          <div>
-            <label>Edge Threshold: {threshold}</label>
-            {/* <input
-              type="number"
+          <div className="slider-container">
+            <div className="slider-label">Edge Threshold: {threshold}</div>
+            <input
+              type="range"
               min="1"
               max="15"
-              value={thresholdInputValue}
-              onChange={handleThresholdInput}
-              style={{ marginLeft: '10px' }}
-              className="input"
-            /> */}
-            <div className="slider">
-              <input
-                type="range"
-                min="1"
-                max="15"
-                step="1"
-                value={threshold}
-                onChange={handleThresholdSlider}
-              />
-            </div>
+              step="1"
+              value={threshold}
+              onChange={handleThresholdSlider}
+            />
           </div>
 
-
           {resultImage && (
-              <a href={resultImage} download={`${originalFileName.replace(/\.[^/.]+$/, "")}_cartoonized.png`} className="download-button">
+            <div className="download-container">
+              <a
+                href={resultImage}
+                download={`${originalFileName.replace(/\.[^/.]+$/, "")}_cartoonized.png`}
+                className="download-button"
+              >
                 Download Cartoon
-              </a>)}
-        </div>
-  
+              </a>
+            </div>
+          )}
+      </div>
+
         {/* Original Image Column */}
         <div className="column image-column">
-          <h4>Original:</h4>
+          <img src="/assets/Original Text.png" className='label_img'/>
           <div className="image-box">
             {initialImage && <img src={initialImage} alt="original" />}
           </div>
@@ -326,7 +299,7 @@ function App() {
   
         {/* Processed Image Column */}
         <div className="column image-column">
-          <h4>Cartoonized:</h4>
+          <img src="/assets/Cartoonized Text.png" className='label_img'/>
           <div className="image-box">
             {resultImage && <img src={resultImage} alt="processed" />}
           </div>
