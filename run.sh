@@ -1,6 +1,6 @@
 # Use ./run.sh to run web app
 
-# Start Flask backend
+#Start Flask backend
 cd backend
 source venv/bin/activate
 echo "Starting backend..."
