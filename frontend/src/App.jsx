@@ -230,8 +230,8 @@ function App() {
   return (
     <div className="App">
       <div className="flex-container">
-        <div className="column options">
-          <img src="/assets/Cartoonizer Logo.png" className='title_img' />
+        <div className="options-column">
+          <img className='title-img' src="/assets/cartoonizer_logo.png"/>
 
           <div className="upload-container">
             <div className="drop-zone" onClick={handleClick} onDrop={handleDrop} onDragOver={handleDragOver}>
@@ -240,49 +240,49 @@ function App() {
             </div>
           </div>
 
-          <div className="slider-container">
-            <div className="slider-label">Edge Thickness: {thickness}</div>
-            <input
-              type="range"
-              min="1"
-              max="9"
-              step="1"
-              value={thickness}
-              onChange={handleThicknessSlider}
-            />
-          </div>
+          <div className="all-sliders-container">
+            <div className="slider-container">
+              <div className="slider-label">Edge Thickness: {thickness}</div>
+              <input
+                type="range"
+                min="1"
+                max="9"
+                step="1"
+                value={thickness}
+                onChange={handleThicknessSlider}
+              />
+            </div>
 
-          <div className="slider-container">
-            <div className="slider-label">Edge Intensity: {intensity}</div>
-            <input
-              type="range"
-              min="3"
-              max="99"
-              step="2"
-              value={intensity}
-              onChange={handleIntensitySlider}
-            />
-          </div>
+            <div className="slider-container">
+              <div className="slider-label">Edge Intensity: {intensity}</div>
+              <input
+                type="range"
+                min="3"
+                max="199"
+                step="2"
+                value={intensity}
+                onChange={handleIntensitySlider}
+              />
+            </div>
 
-          <div className="slider-container">
-            <div className="slider-label">Edge Threshold: {threshold}</div>
-            <input
-              type="range"
-              min="1"
-              max="15"
-              step="1"
-              value={threshold}
-              onChange={handleThresholdSlider}
-            />
+            <div className="slider-container">
+              <div className="slider-label">Edge Threshold: {threshold}</div>
+              <input
+                type="range"
+                min="1"
+                max="15"
+                step="1"
+                value={threshold}
+                onChange={handleThresholdSlider}
+              />
+            </div>
           </div>
 
           {resultImage && (
             <div className="download-container">
-              <a
-                href={resultImage}
+              <a href={resultImage}
                 download={`${originalFileName.replace(/\.[^/.]+$/, "")}_cartoonized.png`}
-                className="download-button"
-              >
+                className="download-button">
                 Download Cartoon
               </a>
             </div>
@@ -290,16 +290,16 @@ function App() {
       </div>
 
         {/* Original Image Column */}
-        <div className="column image-column">
-          <img src="/assets/Original Text.png" className='label_img'/>
+        <div className="image-column">
+          <img src="/assets/original_text.png" className='original-label-img'/>
           <div className="image-box">
             {initialImage && <img src={initialImage} alt="original" />}
           </div>
         </div>
   
         {/* Processed Image Column */}
-        <div className="column image-column">
-          <img src="/assets/Cartoonized Text.png" className='label_img'/>
+        <div className="image-column">
+          <img src="/assets/cartoonized_text.png" className='cartoonized-label-img'/>
           <div className="image-box">
             {resultImage && <img src={resultImage} alt="processed" />}
           </div>
