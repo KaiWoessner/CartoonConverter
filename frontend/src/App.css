@@ -1,3 +1,14 @@
+body {
+  font-family: 'Yatra One', sans-serif;
+}
+
+:root {
+  --accent-color: #800909;
+  --bg-color: #feeded;
+  --accent2-color: #fed3d3;
+  --accent-hover: #ffbdbd;
+}
+
 /************************************************************/
 /************************* GENERAL **************************/
 /************************************************************/
@@ -6,8 +17,8 @@ html, body {
   margin: 0;    /* remove default margin and padding*/
   padding: 0;
   overflow: hidden;   /* prevents scrollbar */
-  background-color: #fffaf9; /* Makes sure background is consistent dependent of browser or darkmode */
-  color: #3f1e06;   
+  background-color: var(--bg-color); /* Makes sure background is consistent dependent of browser or darkmode */
+  color: var(--accent-color);   
 }
 
 /* Sets relative size for interior containers */
@@ -61,11 +72,11 @@ html, body, #root, .App, .flex-container {
   width: 100%;           
   height: 130px;             /* Set drop zone height */
   padding: 20px;            /* Better align inside text */
-  border: 2px dashed #7d0000;
+  border: 2px dashed var(--accent-color);
   border-radius: 12px;
-  background-color: #fdd7d7;
+  background-color: var(--accent2-color);
   text-align: center;
-  color: #7d0000;
+  color: var(--accent-color);
   transition: background-color 0.2s ease;
   display: flex;          /* Center text */
   justify-content: center;
@@ -75,7 +86,7 @@ html, body, #root, .App, .flex-container {
 
 /* Styling when hovering over drop zone */
 .drop-zone:hover {
-  background-color: #ffbdbd;
+  background-color: var(--accent-hover);
   cursor: pointer;
 }
 
@@ -110,10 +121,10 @@ html, body, #root, .App, .flex-container {
 /* Slider track */
 .slider-container input[type="range"]::-webkit-slider-runnable-track{
   height: 35px;
-  background: #fdd7d7;
+  background: var(--accent2-color);
   border-radius: 100px;
-  box-shadow: 0 0 10px #fdd7d7;
-  border: 1px solid #7d0000; 
+  box-shadow: 0 0 10px var(--accent2-color);
+  border: 1px solid var(--accent-color); 
 }
 
 /* Slider thumb */
@@ -122,15 +133,15 @@ html, body, #root, .App, .flex-container {
   height: 35px;
   width: 35px;
   border-radius: 100%;
-  background: #7d0000;
-  box-shadow: 0 0 10px #7d0000;
+  background: var(--accent-color);
+  box-shadow: 0 0 10px var(--accent-color);
   margin-top: 0px;
   transition: box-shadow 0.3s ease;
 }
 
 /* Styling when hovering over slider thumb */
 .slider-container input[type="range"]:hover::-webkit-slider-thumb {
-  box-shadow: 0 0 30px #7d0000;
+  box-shadow: 0 0 30px var(--accent-color);
 }
 
 /***********************************************************/
@@ -147,20 +158,20 @@ html, body, #root, .App, .flex-container {
   width: 100%;
   display: inline-block;
   padding: 10px 0px 10px 0px; /* padding: top right bottom left */
-  background-color: #fdd7d7;
-  color: #7d0000;      
+  background-color: var(--accent2-color);
+  color: var(--accent-color);      
   font-size: 16px; 
   border-radius: 10px;   /* Rounded corners */
-  border: 1px solid #7d0000; 
+  border: 1px solid var(--accent-color); 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Add shadow */
   transition: background-color 0.3s, transform 0.3s;  /* Smooth transition for hover effects */
 }
 
 /* Styling when hovering over download button */
 .download-button:hover {
-  background-color: #ffbdbd;
+  background-color: var(--accent-hover);
   transform: scale(1.05);      /* Slightly scale up button size on hover */
-  color: #7d0000;
+  color: var(--accent-color);
 }
 
 /***********************************************************/
@@ -194,7 +205,7 @@ html, body, #root, .App, .flex-container {
   display:flex;                   /* Center image */
   justify-content: center;
   max-height: 92%;                /* Prevent image from overflowing at the bottom */
-  border: 3px solid #7d0000; 
+  border: 3px solid var(--accent-color); 
   border-radius: 12px; 
   background-color: #e3e3e3;
   background-image:                       /* Background checker pattern */
