@@ -1,78 +1,203 @@
+/************************************************************/
+/************************* GENERAL **************************/
+/************************************************************/
+
 html, body {
-  margin: 0;    /* remove default margin & padding*/
+  margin: 0;    /* remove default margin and padding*/
   padding: 0;
   overflow: hidden;   /* prevents scrollbar */
-  height: 100%;   /* stretches body to width of screen */
-  width: 100%;
   background-color: #fffaf9; /* Makes sure background is consistent dependent of browser or darkmode */
-  color: #3f1e06;            /* Ensures consistent text color */
-}
-.download-container {
-  margin-top: 20px;
+  color: #3f1e06;   
 }
 
-/* Added this cause apparently this fixes the scaling problem I guess the entire
-ancestory needs to be set */
+/* Sets relative size for interior containers */
 html, body, #root, .App, .flex-container {
   height: 100%;
   width: 100%;
 }
 
-/* Added By Ben */
-.flex-container { /* Contains the 3 columns (options, original image, processed image) */
+/***********************************************************/
+/********************* MAIN CONTAINER **********************/
+/***********************************************************/
+
+/* Contains the 3 columns (options, original image, processed image) */
+.flex-container {
   display: flex;
   justify-content: space-between;
-  gap: 20px; /* To prevent minimum gap */
+  gap: 20px; /* Sets minimum gap */
   box-sizing: border-box; /* ensures padding is included in the height */
   padding: 20px;
 }
 
-.image-column { /* Container for each image column */
+/***********************************************************/
+/********************* OPTIONS COLUMN **********************/
+/***********************************************************/
+
+/* General optains container */
+.options-column {
   display: flex;
-  flex: 0 0 38%;
+  flex-direction: column;
+  flex: 0 0 20%;    /* Sets width of options column */
+}
+
+
+/* Title image */
+.title-img {
+  padding-bottom: 30px;
+}
+
+/***********************************************************/
+/******************* DROP ZONE CONTAINER *******************/
+/***********************************************************/
+
+/* Container for drop zone */
+.upload-container {
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+/* Drag and drop area */
+.drop-zone {
+  width: 100%;           
+  height: 130px;             /* Set drop zone height */
+  padding: 20px;            /* Better align inside text */
+  border: 2px dashed #7d0000;
+  border-radius: 12px;
+  background-color: #fdd7d7;
+  text-align: center;
+  color: #7d0000;
+  transition: background-color 0.2s ease;
+  display: flex;          /* Center text */
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* Styling when hovering over drop zone */
+.drop-zone:hover {
+  background-color: #ffbdbd;
+  cursor: pointer;
+}
+
+/***********************************************************/
+/******************** SLIDER CONTAINER *********************/
+/***********************************************************/
+
+/* Container with all sliders */
+.all-sliders-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 100%;
+  height: 100%;
+  margin-bottom: 10px;
+}
+
+/* Slider text */
+.slider-label {
+  font-size: 26px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+/* General slider */
+.slider-container input[type="range"]{
+  appearance: none;
+  width: 100%;
+  background: transparent;
+}
+
+/* Slider track */
+.slider-container input[type="range"]::-webkit-slider-runnable-track{
+  height: 35px;
+  background: #fdd7d7;
+  border-radius: 100px;
+  box-shadow: 0 0 10px #fdd7d7;
+  border: 1px solid #7d0000; 
+}
+
+/* Slider thumb */
+.slider-container input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 35px;
+  width: 35px;
+  border-radius: 100%;
+  background: #7d0000;
+  box-shadow: 0 0 10px #7d0000;
+  margin-top: 0px;
+  transition: box-shadow 0.3s ease;
+}
+
+/* Styling when hovering over slider thumb */
+.slider-container input[type="range"]:hover::-webkit-slider-thumb {
+  box-shadow: 0 0 30px #7d0000;
+}
+
+/***********************************************************/
+/******************* DOWNLOAD CONTAINER ********************/
+/***********************************************************/
+
+/* General container with download button */
+.download-container {
+  text-align: center; 
+}
+
+/* Download button itself */
+.download-button {
+  width: 100%;
+  display: inline-block;
+  padding: 10px 0px 10px 0px; /* padding: top right bottom left */
+  background-color: #fdd7d7;
+  color: #7d0000;      
+  font-size: 16px; 
+  border-radius: 10px;   /* Rounded corners */
+  border: 1px solid #7d0000; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Add shadow */
+  transition: background-color 0.3s, transform 0.3s;  /* Smooth transition for hover effects */
+}
+
+/* Styling when hovering over download button */
+.download-button:hover {
+  background-color: #ffbdbd;
+  transform: scale(1.05);      /* Slightly scale up button size on hover */
+  color: #7d0000;
+}
+
+/***********************************************************/
+/********************** IMAGE COLUMN ***********************/
+/***********************************************************/
+
+/* Container for each image column */
+.image-column {
+  display: flex;
+  flex: 0 0 38%; /* Sets width of image column */
   flex-direction: column;
   align-items: center;
 }
 
-.options {
-  display: flex;              /* Missing! Enables flex layout */
-  flex-direction: column;
-  align-items: flex-start;
-  flex: 0 0 20%;
-  height: 100%;
-  padding: 20px;
-  box-sizing: border-box;
+/* Orignal text */
+.original-label-img {
+  height: 40px;
+  margin-bottom: 10px;
 }
 
-
-
-.slider-label {
+/* Cartoonized text */
+.cartoonized-label-img {
+  height: 46px;
   margin-bottom: 4px;
-  font-weight: 500;
 }
 
+/* Image box where image is located */
 .image-box {
-  /* margin-top: 20px; */
   height: 100%;
   width: 100%;
-
-   /* Center the images */
-  display:flex;
+  display:flex;                   /* Center image */
   justify-content: center;
-  
-  /* Make the image not overflow at the bottom */
-  max-height: 90%;
-
-  border: 3px solid #7d0000;   /* Border */
-  border-radius: 12px;      /* Rounds Corners */
-  background-color: #e3e3e3; /* Background */
-  /*
-    Im not entirely sure how the checker pattern works tbh. Generally, it renders diagonal squares alternating between colored and transparent
-  and then does it again but mirrored (45deg vs. -45deg). Then for some reason it does this again with different values for the gradient.
-  The 25% for the first means it does gray for the from 0-25% and then transparent from 25-100%. Then transparent from 0-75% and gray from 75-100%.
-  The percentage relates to the path of the gradient for example in the first 2 lines it is gray for 25% of the path and then switches to transparent.
-  */
-  background-image:
+  max-height: 92%;                /* Prevent image from overflowing at the bottom */
+  border: 3px solid #7d0000; 
+  border-radius: 12px; 
+  background-color: #e3e3e3;
+  background-image:                       /* Background checker pattern */
     linear-gradient(45deg, #ccc 25%, transparent 25%),
     linear-gradient(-45deg, #ccc 25%, transparent 25%),
     linear-gradient(45deg, transparent 75%, #ccc 75%),
@@ -81,140 +206,17 @@ html, body, #root, .App, .flex-container {
   background-position: 0 0, 0 10px, 10px -10px, -10px 0px;    /* Offset for tiles to line up propery */
 }
 
+/* Limit size of actual image */
 img {
   max-width: 100%;
   max-height: 100%;
-  /* margin: auto; */
-  /* height: 100%; */
   object-fit: contain;
   border-radius: 8px;
-  /* align-items: center;
-  justify-content: center; */
-  /*border: 30px solid #5f79ff;    Border */
-  /* justify-content: center; */
-  /* margin-bottom: 0px; */
-}
-
-.title_img {
-  height: 200px;
-}
-
-.label_img {
-  height: 30px;
-  margin-bottom: 10px;
-}
-
-.slider {
-  width: 100%
-}
-
-.input { /* for slider */
-  width: 25px;
-  padding: 1px;
-  margin-left: 10px;
-  border-radius: 5px;
-  font-size: 15px;
-  text-align: center;
-  transition: all 0.3s ease;
-  background-color: #eff5ff;
-  color: #010211;            
 }
 
 
-/* Drag and drop area */
-/* .drop-zone {
-  width: 50%;
-  padding: 40px;
-  border: 2px dashed #ff5f5f;
-  border-radius: 12px;
-  background-color: #fff0f0;
-  text-align: center;
-  color: #360000;
-  margin-bottom: 20px;
-  transition: background-color 0.2s ease;
-} */
-
-.drop-zone {
-  width: 100%;               /* Match rest of column width */
-  height: 260px;             /* Taller vertically */
-  padding: 20px;
-  border: 2px dashed #5f79ff;
-  border-radius: 12px;
-  background-color: #f0f4ff;
-  text-align: center;
-  color: #00157d;
-  margin-bottom: 40px;
-  transition: background-color 0.2s ease;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-sizing: border-box;
-}
 
 
-/* Add spacing above all three sliders */
-.slider-container:nth-of-type(3) {
-  margin-top: 5%; /* space above Edge Thickness */
-}
-
-.slider-container:nth-of-type(4) {
-  margin-top: 5%; /* space above Edge Intensity */
-}
-
-.slider-container:nth-of-type(5) {
-  margin-top: 5%; /* space above Edge Threshold */
-}
 
 
-.title-container,
-.upload-container,
-.slider-container{
-  margin-bottom: 10px; /* Reduce from 20px */
-  width: 100%;
-}
-.download-container {
-  margin-bottom: 12px;
-  width: 100%;
-}
 
-.slider-container input[type="range"]{
-  -webkit-appearance: none;
-  width: 100%;
-  background: transparent;
-}
-
-.slider-container input[type="range"]::-webkit-slider-runnable-track{
-  height: 40px;
-  background: #5f79ff;
-  border-radius: 100px;
-  box-shadow: 0 0 10px #5f79ff; /* GLOW effect */
-
-}
-
-/* === THUMB === */
-.slider-container input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  height: 40px;
-  width: 40px;
-  border-radius: 100%;
-  background: #00157d;
-  box-shadow: 0 0 10px #00157d; /* GLOW */
-  margin-top: 0px;
-  transition: box-shadow 0.3s ease;
-}
-
-.slider-container input[type="range"]:hover::-webkit-slider-thumb {
-  box-shadow: 0 0 30px #00157d;
-}
-
-.slider-label {
-  width: 100%;
-  margin-bottom: 12px;
-  font-size: 14px;
-}
-
-.drop-zone:hover {
-  background-color: #e0ebff;
-  cursor: pointer;
-}
