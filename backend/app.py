@@ -35,9 +35,9 @@ def apply_cartoon():
 
     # Extract slider values from frontend form data json
     data = request.get_json()
-    thickness = int(data.get('thickness', 3))
-    intensity = int(data.get('intensity', 35))
-    threshold = int(data.get('threshold', 1))
+    thickness = int(data.get('thickness', 2))
+    intensity = int(data.get('intensity', 31))
+    threshold = int(data.get('threshold', 3))
     
     # print("Thickness", thickness)
     # print("Intensity", intensity)
