@@ -134,17 +134,19 @@ html, body, #root, .App, .flex-container {
 }
 
 /***********************************************************/
-/******************* DOWNLOAD CONTAINER ********************/
+/******************* BUTTON CONTAINER ********************/
 /***********************************************************/
 
-/* General container with download button */
-.download-container {
+/* General container with download button and erase button */
+.button-container {
   text-align: center; 
+  display: flex;
+  gap: 20px;
 }
 
 /* Download button itself */
 .download-button {
-  width: 100%;
+  width: 50%;
   display: inline-block;
   padding: 10px 0px 10px 0px; /* padding: top right bottom left */
   background-color: #fdd7d7;
@@ -158,6 +160,34 @@ html, body, #root, .App, .flex-container {
 
 /* Styling when hovering over download button */
 .download-button:hover {
+  background-color: #ffbdbd;
+  transform: scale(1.05);      /* Slightly scale up button size on hover */
+  color: #7d0000;
+}
+
+/* Styling when no image has been uploaded */
+.download-button.disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Erase button itself */
+.erase-button {
+  width: 50%;
+  display: inline-block;
+  padding: 10px 0px 10px 0px; /* padding: top right bottom left */
+  background-color: #fdd7d7;
+  color: #7d0000;      
+  font-size: 16px; 
+  border-radius: 10px;   /* Rounded corners */
+  border: 1px solid #7d0000; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Add shadow */
+  transition: background-color 0.3s, transform 0.3s;  /* Smooth transition for hover effects */
+}
+
+/* Styling when hovering over erase button */
+.erase-button:hover {
   background-color: #ffbdbd;
   transform: scale(1.05);      /* Slightly scale up button size on hover */
   color: #7d0000;

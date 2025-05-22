@@ -10,13 +10,13 @@ function App() {
   const [resultImage, setResultImage] = useState(null);
   // If state variables already saved default to them otherwise use defaults
   const [thickness, setThickness] = useState(() =>
-    parseInt(localStorage.getItem("thickness")) || 3
+    parseInt(localStorage.getItem("thickness")) || 2
   );
   const [intensity, setIntensity] = useState(() =>
-    parseInt(localStorage.getItem("intensity")) || 35
+    parseInt(localStorage.getItem("intensity")) || 31
   );
   const [threshold, setThreshold] = useState(() =>
-    parseInt(localStorage.getItem("threshold")) || 1
+    parseInt(localStorage.getItem("threshold")) || 3
   );
   const [originalFileName, setOriginalFileName] = useState(null);
 
@@ -41,11 +41,6 @@ function App() {
         });
   
         const convertedImage = new File([blob],image.name.replace(/\.heic$/i, ".png"),{ type: "image/png" });
-
-        //imageToUpload = convertedImage;
-
-        // Save to localStorage
-        //saveToLocalStorage(convertedImage);
         
        await uploadImage(convertedImage);
       };
@@ -53,26 +48,11 @@ function App() {
       reader.readAsArrayBuffer(image);
       return;
     }
-    //else {
-      // imageToUpload = image;
-      // saveToLocalStorage(imageToUpload);
-    //}
     
     // If PNG, continue to uploadImage
    await uploadImage(image);
   };
 
-
-  // const saveToLocalStorage = (image) => {
-  //   const reader = new FileReader();
-  //   reader.onloadend = async () => {
-  //     localStorage.setItem("imageBase64", reader.result);
-  //     localStorage.setItem("originalImageName", image.name);
-  //     await uploadImage(image);
-  //   };
-  //   reader.readAsDataURL(image);
-  // };
-  
   // When image uploaded and type handled
   const uploadImage = async (image) => {
     // Converts initial image to binary object that is able to be displayed
@@ -176,7 +156,7 @@ function App() {
     localStorage.setItem('threshold', threshold);
   }, [thickness, intensity, threshold]);
 
-  // retrieves saved local storage items on load
+  // retrieves saved local storage and indexeddb items on load
   useEffect(() => {
     (async () => {
       const savedThickness = localStorage.getItem('thickness');
@@ -216,23 +196,46 @@ function App() {
   
         if (res.ok) {
           updateCartoon(
-            parseInt(savedThickness) || 3,
-            parseInt(savedIntensity) || 35,
-            parseInt(savedThreshold) || 1
+            parseInt(savedThickness) || 2,
+            parseInt(savedIntensity) || 31,
+            parseInt(savedThreshold) || 3
           );
         }
       }
     })();
   }, []);
 
+  // Erase local storage and indexeddb
+  const handleEraseData = async () => {
+    // Clear localStorage
+    localStorage.clear();
+  
+    // Open indexeddb
+    const dbRequest = indexedDB.open('CartoonizerDB', 1);
+  
+    // If indexeddb exists
+    dbRequest.onsuccess = () => {
+      const db = dbRequest.result;
+  
+      // Clear saved indexeddb data
+      const tx = db.transaction('images', 'readwrite');
+      const store = tx.objectStore('images');
+      store.clear();
+      window.location.reload();
+    };
+
+  };
+
 
   // HTML
   return (
     <div className="App">
+      {/* Columns container */}
       <div className="flex-container">
         <div className="options-column">
           <img className='title-img' src="/assets/cartoonizer_logo.png"/>
 
+          {/* Upload container */}
           <div className="upload-container">
             <div className="drop-zone" onClick={handleClick} onDrop={handleDrop} onDragOver={handleDragOver}>
               <p>Drag and drop an image here or click</p>
@@ -240,7 +243,9 @@ function App() {
             </div>
           </div>
 
+          {/* Sliders container */}
           <div className="all-sliders-container">
+            {/* Thickness slider */}
             <div className="slider-container">
               <div className="slider-label">Edge Thickness: {thickness}</div>
               <input
@@ -253,18 +258,20 @@ function App() {
               />
             </div>
 
+            {/* Intensity slider */}
             <div className="slider-container">
               <div className="slider-label">Edge Intensity: {intensity}</div>
               <input
                 type="range"
                 min="3"
-                max="199"
+                max="299"
                 step="2"
                 value={intensity}
                 onChange={handleIntensitySlider}
               />
             </div>
 
+            {/* Threshold slider */}
             <div className="slider-container">
               <div className="slider-label">Edge Threshold: {threshold}</div>
               <input
@@ -278,15 +285,19 @@ function App() {
             </div>
           </div>
 
-          {resultImage && (
-            <div className="download-container">
-              <a href={resultImage}
-                download={`${originalFileName.replace(/\.[^/.]+$/, "")}_cartoonized.png`}
-                className="download-button">
-                Download Cartoon
-              </a>
-            </div>
-          )}
+          {/* Button container */}
+          <div className="button-container">
+            <a href={resultImage || "#"}
+              download={ resultImage ? `${originalFileName.replace(/\.[^/.]+$/, "")}_cartoonized.png` : undefined}
+              className={`download-button ${!resultImage ? "disabled" : ""}`}
+              onClick={(e) => {
+                if (!resultImage) e.preventDefault();
+              }}>
+              Download Cartoon
+            </a>
+
+            <button className="erase-button" onClick={handleEraseData}>Erase Data</button>
+          </div>
       </div>
 
         {/* Original Image Column */}
