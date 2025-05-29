@@ -135,7 +135,7 @@ html, body, #root, .App, .flex-container {
   border-radius: 100%;
   background: var(--accent-color);
   box-shadow: 0 0 10px var(--accent-color);
-  margin-top: 0px;
+  margin-top: -1px;
   transition: box-shadow 0.3s ease;
 }
 
